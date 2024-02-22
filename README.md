@@ -14,23 +14,11 @@ Before you begin, ensure you have installed:
 
 1. Clone the repository to your local machine:
 
-```bash
-git clone <your-frontend-repo-url>
-cd <your-frontend-directory>
-```
 
 2. Install the project dependencies:
 
 ```bash
 npm install
-```
-
-3. Set up your environment variables:
-
-Create a `.env` file in the root directory of your project and add the necessary environment variables. For example, your backend API URL:
-
-```env
-REACT_APP_API_URL=http://localhost:5000
 ```
 
 ## Running the Application
@@ -51,5 +39,5 @@ To build the application for production, run:
 npm run build
 ```
 
-This command builds the app for production to the `build` folder. Your app is ready to be deployed!
+This command builds the app for production to the `build` folder. The app is ready to be deployed!
 ```
