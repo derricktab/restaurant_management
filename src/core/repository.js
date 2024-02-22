@@ -4,7 +4,7 @@ export async function addRestaurant(restaurantData) {
 
   const reqData = JSON.stringify(restaurantData);
   console.log("THE DATA TO SEND: ", reqData);
-  
+
   try {
     const response = await fetch('http://localhost:5000/restaurants', {
       method: 'POST',
@@ -37,27 +37,29 @@ export async function addRestaurant(restaurantData) {
 }
 
 // METHOD TO UPDATE RESTAURANT
-export async function updateRestaurant(updatedData) {
+export async function updateRestaurant(updatedData, restaurantId) {
   // Call backend to update restaurant data
   try {
-    const response = await fetch('http://localhost:5000/restaurants', {
-      method: 'POST',
+    const response = await fetch(`http://localhost:5000/restaurants/${restaurantId}`, {
+      method: 'PUT',
       headers: {
         "content-type": "application/json"
       },
       body: JSON.stringify(updatedData)
     });
+    
+    const data = await response.json();
 
-    if (response === null) {
+    console.log("RESPONSE FROM SERVER: ", data);
+
+    if (response.ok) {
+      console.log('Restaurant edited successfully:', data);
+      return true;
+    } else {
+      console.error('Failed to add restaurant:', data.message || 'Unknown error');
       return false;
     }
 
-    // if respone is successful
-    if (response.status === 201 || response.status === 200) {
-      return true;
-    }
-
-    return true;
   } catch (error) {
     console.log(error);
     return false;
@@ -65,32 +67,28 @@ export async function updateRestaurant(updatedData) {
 };
 
 
-// METHOD TO DELETE A RESTAURANT
+// METHOD TO DELETE RESTAURANT
 export async function deleteRestaurant(restaurantId) {
-  // call backend to delete restaurant
   try {
-    const response = await fetch('http://localhost:5000/restaurants', {
-      method: 'POST',
-      headers: {
-        "content-type": "application/json"
-      },
+    const response = await fetch(`http://localhost:5000/restaurants/${restaurantId}`, {
+      method: 'DELETE'
     });
 
-    if (response === null) {
-      return false;
+    if (!response.ok) {
+      // If server returns a bad response, throw an error
+      const errorData = await response.json();
+      throw new Error(errorData.message || 'Could not delete the restaurant.');
     }
 
-    // if respone is successful
-    if (response.status === 201 || response.status === 200) {
-      return true;
-    }
-
+    // Return a success message or the deleted restaurant's data if needed
     return true;
+
   } catch (error) {
-    console.log(error);
-    return false;
+    console.error('Error deleting restaurant:', error);
+    return false; 
   }
 };
+
 
 // METHOD TO GET RESTAURANTS
 export async function getRestaurants() {

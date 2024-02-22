@@ -1,15 +1,16 @@
 import './App.css';
 import { useEffect, useState } from 'react';
 import { deleteRestaurant, getRestaurants } from '../core/repository';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 
 export default function App() {
 
   const [restaurants, setRestaurants] = useState([]);
-  const [selectedRestaurant, setSelectedRestaurant] = useState(null);
   const [deleting, setDeleting] = useState(false);
 
-
+  const navigate = useNavigate();
   // GET DATA
   useEffect(() => {
     async function fetchData() {
@@ -21,9 +22,9 @@ export default function App() {
   }, []);
 
   // HANDLE EDIT RESTAURANT
-  function handleEditRestaurant(restaurant) {
+  function handleEditRestaurant(initialData) {
     console.log("EDIT");
-    setSelectedRestaurant(restaurant);
+    navigate("/add_restaurant", { state: { initialData } });
   }
 
   // HANDLE DELETE RESTAURANT
@@ -37,12 +38,13 @@ export default function App() {
     const res = await deleteRestaurant(restaurantId);
     if (res) {
       setRestaurants(restaurants.filter(restaurant => restaurant.id !== restaurantId));
+      toast.success("Restaurant deleted successfully");
     }
 
     setDeleting(false);
   }
 
-  function RestaurantList({ restaurants, onSelect, onDelete }) {
+  function RestaurantList({ restaurants }) {
     return (
       <div className='container mt-5'>
         <h1 className='text-center py-5'>Restaurant List</h1>
@@ -71,7 +73,7 @@ export default function App() {
                 <td>{restaurant.name}</td>
                 <td>{restaurant.address}</td>
                 <td>{restaurant.description}</td>
-                <td>{restaurant.phone_number}</td>
+                <td>{restaurant.phone}</td>
                 <td>
 
                   {/* EDIT RESTAURANT BUTTON */}
@@ -94,35 +96,14 @@ export default function App() {
   }
 
 
-  // method to handle add restaurant
-  function handleAddRestaurant(restaurantData) {
-    // call backend to add restaurant
-  }
-
-  // Method to handle update restaurant
-  function handleUpdateRestaurant(updatedData) {
-    // call backend to update restaurant data
-  }
-
-  // Method to handle delete restaurant
-  function handleDeleteRestaurant(restaurantId) {
-    // call backend to delete restaurant
-  }
-
+ 
 
   return (
     <div>
       <RestaurantList
         restaurants={restaurants}
       />
-      {/* {selectedRestaurant ? (
-        <RestaurantForm 
-          initialData={selectedRestaurant} 
-          onSubmit={handleUpdateRestaurant} 
-        />
-      ) : (
-        <RestaurantForm onSubmit={handleAddRestaurant} />
-      )} */}
+
     </div>
   );
 

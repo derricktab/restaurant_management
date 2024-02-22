@@ -1,12 +1,16 @@
 import React, { useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { addRestaurant } from "../core/repository";
+import { addRestaurant, updateRestaurant } from "../core/repository";
+import { useLocation } from "react-router-dom";
 
-export default function AddRestaurant({ initialData }) {
-  const [formData, setFormData] = useState(
-    initialData || {}
-  );
+export default function AddRestaurant() {
+  const location = useLocation();
+  const initialData = location.state?.initialData;
+
+  console.log("THE INITIAL DATA: ", initialData);
+
+  const [formData, setFormData] = useState(initialData || {});
 
   const navigate = useNavigate();
 
@@ -18,6 +22,22 @@ export default function AddRestaurant({ initialData }) {
   //   METHOD TO HANDLE SUBMIT
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+
+    // UPDATING THE RESTAURANT
+    if(initialData) {
+      const res = await updateRestaurant(formData, initialData.id);
+      if (res === true) {
+        console.log("RESTAURANT UPDATED");
+        toast.success("Restaurant updated successfully!");
+        navigate("/");
+      } else {
+        toast.error("Something went wrong!");
+      }
+
+      return;
+    }
+
     const res = await addRestaurant(formData);
 
     if (res === true) {
@@ -31,7 +51,7 @@ export default function AddRestaurant({ initialData }) {
 
   return (
     <div className="container my-5">
-      <h1 className="text-center pt-5">Add Restaurant</h1>
+      <h1 className="text-center pt-5">  {initialData ? "Edit" : "Add"} Restaurant</h1>
 
       <hr className="mb-5" />
 
@@ -65,7 +85,7 @@ export default function AddRestaurant({ initialData }) {
           <label htmlFor="description">Description</label>
           <input
             name="description"
-            value={formData.descrption}
+            value={formData.description}
             onChange={handleChange}
             placeholder="Description"
             className="form-control"
@@ -85,7 +105,7 @@ export default function AddRestaurant({ initialData }) {
         </div>
 
         <button type="submit" className="btn btn-success mt-4 form-control">
-          Submit
+          {initialData ? "Save" : "Submit"}
         </button>
       </form>
     </div>
