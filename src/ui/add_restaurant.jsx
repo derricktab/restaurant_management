@@ -5,7 +5,7 @@ import { addRestaurant } from "../core/repository";
 
 export default function AddRestaurant({ initialData }) {
   const [formData, setFormData] = useState(
-    initialData || { name: "", details: "" }
+    initialData || {}
   );
 
   const navigate = useNavigate();
@@ -62,12 +62,12 @@ export default function AddRestaurant({ initialData }) {
 
         {/* RESTAURANT DESCRIPTION */}
         <div className="form-group mb-4">
-          <label htmlFor="descrption">Description</label>
+          <label htmlFor="description">Description</label>
           <input
-            name="descrption"
+            name="description"
             value={formData.descrption}
             onChange={handleChange}
-            placeholder="Descrption"
+            placeholder="Description"
             className="form-control"
           />
         </div>

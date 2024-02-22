@@ -14,7 +14,7 @@ export default function App() {
   useEffect(() => {
     async function fetchData() {
       const response = await getRestaurants();
-      console.log(response);
+      console.log("RESPONSE FROM SERVER: ", response);
       setRestaurants(response);
     }
     fetchData();
@@ -114,8 +114,6 @@ export default function App() {
     <div>
       <RestaurantList
         restaurants={restaurants}
-        onSelect={(id) => setSelectedRestaurant(restaurants.find(r => r.id === id))}
-        onDelete={handleDeleteRestaurant}
       />
       {/* {selectedRestaurant ? (
         <RestaurantForm 
