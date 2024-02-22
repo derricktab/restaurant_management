@@ -1,13 +1,24 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './App';
+import App from './ui/App';
 import reportWebVitals from './reportWebVitals';
+import AddRestaurant from './ui/add_restaurant';
+import { Routes, Route, BrowserRouter } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <ToastContainer />
+    <BrowserRouter>
+      <Routes>
+        <Route path='/' element={<App />} />
+        <Route path='/add_restaurant' element={<AddRestaurant />} />
+      </Routes>
+    </BrowserRouter>
   </React.StrictMode>
 );
 
